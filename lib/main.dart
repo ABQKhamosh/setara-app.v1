@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
+import 'package:flutter/services.dart';
+import 'core/app_state.dart';
+import 'core/theme.dart';
+import 'screens/root.dart';
 
-void main() {
-  runApp(const SetaraApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  await AppState.instance.load();
+  runApp(const DanagakApp());
 }
 
-class SetaraApp extends StatelessWidget {
-  const SetaraApp({Key? key}) : super(key: key);
+class DanagakApp extends StatelessWidget {
+  const DanagakApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Setara - ستاره',
+      title: 'داناگک',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: const Color(0xFFF5F9FF),
-      ),
-      home: const HomeScreen(),
+      theme: buildTheme(),
+      builder: (BuildContext context, Widget? child) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
+      home: const RootGate(),
     );
   }
 }
